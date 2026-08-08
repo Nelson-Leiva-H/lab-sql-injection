@@ -27,8 +27,6 @@ form:valid .btn-primary:hover{background:#D9551A}
 .link-wrapper{text-align:center;margin-top:28px}
 .link-text{color:#1E6F8C;text-decoration:underline;font-size:15px;font-weight:500;cursor:pointer}
 .btn-outline{width:100%;padding:14px;background:transparent;color:#C97A2B;border:2px solid #C97A2B;border-radius:28px;font-size:16px;font-weight:500;cursor:pointer;margin-top:28px}
-
-/* RESULTADOS SIEMPRE VISIBLES */
 .lab-results{background:#fff;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,0.08);width:100%;max-width:420px;padding:28px;margin-bottom:24px;border-left:4px solid #F26522}
 .lab-badge{display:inline-block;background:#FFF3E0;color:#E65100;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;padding:4px 10px;border-radius:4px;margin-bottom:12px}
 .lab-title{font-size:18px;color:#4A4A4A;font-weight:600;margin-bottom:12px}
@@ -36,7 +34,6 @@ form:valid .btn-primary:hover{background:#D9551A}
 .lab-response{background:#F5F5F5;border:1px solid #E0E0E0;border-radius:8px;padding:16px;font-size:14px;color:#4A4A4A;line-height:1.6}
 .lab-response pre{font-family:'Courier New',monospace;font-size:12px;background:#fff;padding:12px;border-radius:4px;border:1px solid #E0E0E0;overflow-x:auto;margin-top:8px}
 .lab-hint{background:#E3F2FD;border-left:3px solid #2196F3;padding:12px 16px;border-radius:0 8px 8px 0;font-size:13px;color:#1565C0;margin-top:16px;line-height:1.5}
-
 .payload-section{background:#fff;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,0.08);width:100%;max-width:420px;padding:28px;margin-bottom:24px}
 .payload-title{font-size:18px;color:#4A4A4A;font-weight:600;margin-bottom:12px}
 .payload-desc{font-size:14px;color:#666;margin-bottom:20px;line-height:1.5}
@@ -61,11 +58,7 @@ form:valid .btn-primary:hover{background:#D9551A}
 
 <div class="login-container">
 <a class="back-link" onclick="history.back()"><span class="back-arrow">&#8249;</span> Volver</a>
-
-<div class="logo-wrapper">
-<div class="logo"><span class="logo-text">itau</span></div>
-</div>
-
+<div class="logo-wrapper"><div class="logo"><span class="logo-text">itau</span></div></div>
 <p class="welcome-text">Te damos la bienvenida al portal</p>
 <h1 class="portal-name">Itau Personas</h1>
 
@@ -74,7 +67,6 @@ form:valid .btn-primary:hover{background:#D9551A}
 <label class="form-label" for="rut">Ingresa tu RUT</label>
 <input type="text" id="rut" class="form-input" placeholder="Ej: 12.345.678-9" autocomplete="off" required>
 </div>
-
 <div class="form-group">
 <label class="form-label" for="clave">Ingresa tu clave de internet</label>
 <div class="input-wrapper">
@@ -82,18 +74,13 @@ form:valid .btn-primary:hover{background:#D9551A}
 <button type="button" class="toggle-password" onclick="var i=document.getElementById('clave');var b=this;if(i.type=='password'){i.type='text';b.innerHTML='Ocultar';}else{i.type='password';b.innerHTML='Mostrar';}">Mostrar</button>
 </div>
 </div>
-
 <button type="button" class="btn-primary" onclick="doLogin()">Ingresar</button>
 </form>
 
-<div class="link-wrapper">
-<span class="link-text">Problemas con tu clave?</span>
-</div>
-
+<div class="link-wrapper"><span class="link-text">Problemas con tu clave?</span></div>
 <button class="btn-outline">Eres nuevo en Itau? Crea tu clave</button>
 </div>
 
-<!-- RESULTADOS ARRIBA, SIEMPRE VISIBLES -->
 <div class="lab-results" id="labResults">
 <span class="lab-badge">Laboratorio SQLi</span>
 <h3 class="lab-title">Consulta SQL generada</h3>
@@ -102,33 +89,27 @@ form:valid .btn-primary:hover{background:#D9551A}
 <strong>Resultado simulado:</strong>
 <pre id="responseContent">Esperando que presiones Ingresar...</pre>
 </div>
-<div class="lab-hint" id="labHint">
-Selecciona un payload de abajo, copialo y pegalo en el campo de clave para probar la inyeccion SQL.
-</div>
+<div class="lab-hint" id="labHint">Selecciona un payload de abajo, copialo y pegalo en el campo de clave.</div>
 </div>
 
 <div class="payload-section">
 <h2 class="payload-title">Payloads de prueba (SQLi)</h2>
 <p class="payload-desc">Toca cualquier caja para seleccionar el texto. Presiona Ctrl+C para copiar, y pegalo en el campo de clave.</p>
-
 <div class="payload-item">
 <div class="payload-label">Boolean-based</div>
 <input type="text" class="payload-box" readonly value="' OR '1'='1' --" onclick="this.select()">
 <div class="payload-hint">Siempre verdadero. Devuelve todos los usuarios.</div>
 </div>
-
 <div class="payload-item">
 <div class="payload-label">Comment-based</div>
 <input type="text" class="payload-box" readonly value="admin'--" onclick="this.select()">
 <div class="payload-hint">Omite la validacion de contrasena.</div>
 </div>
-
 <div class="payload-item">
 <div class="payload-label">Union-based</div>
 <input type="text" class="payload-box" readonly value="' UNION SELECT * FROM users --" onclick="this.select()">
 <div class="payload-hint">Intenta extraer datos de otras tablas.</div>
 </div>
-
 <div class="payload-item">
 <div class="payload-label">Boolean bypass</div>
 <input type="text" class="payload-box" readonly value="' OR 1=1#" onclick="this.select()">
@@ -159,22 +140,21 @@ Selecciona un payload de abajo, copialo y pegalo en el campo de clave para proba
 
 <script>
 function doLogin(){
-    try {
-        var rut = document.getElementById('rut').value;
-        var clave = document.getElementById('clave').value;
-        var queryDiv = document.getElementById('sqlQuery');
-        var responseDiv = document.getElementById('responseContent');
-        var hintDiv = document.getElementById('labHint');
+var rut=document.getElementById('rut').value;
+var clave=document.getElementById('clave').value;
+var queryDiv=document.getElementById('sqlQuery');
+var responseDiv=document.getElementById('responseContent');
+var hintDiv=document.getElementById('labHint');
 
-        var query = "SELECT * FROM usuarios WHERE rut = '" + rut + "' AND clave = '" + clave + "'";
-        queryDiv.textContent = query;
+var query="SELECT * FROM usuarios WHERE rut = '"+rut+"' AND clave = '"+clave+"'";
+queryDiv.textContent=query;
 
-        var lc = clave.toLowerCase();
-        var lr = rut.toLowerCase();
-        var result = '';
+var lc=clave.toLowerCase();
+var lr=rut.toLowerCase();
+var result="";
 
-        if(lc.indexOf("' or '") !== -1 && lc.indexOf("'='1") !== -1){
-            result = "[!] INYECCION SQL DETECTADA
+if(lc.indexOf("' or '")>-1 && lc.indexOf("'='1")>-1){
+result="[!] INYECCION SQL DETECTADA
 
 La condicion OR '1'='1' siempre es verdadera.
 La consulta devuelve TODOS los registros de la tabla:
@@ -189,8 +169,9 @@ La consulta devuelve TODOS los registros de la tabla:
 +-------------+------------------+-----------+
 
 En un sistema real, esto comprometeria toda la base de datos.";
-        } else if(lc.indexOf("union") !== -1 || lr.indexOf("union") !== -1){
-            result = "[!] INYECCION SQL DETECTADA - UNION BASED
+}
+else if(lc.indexOf("union")>-1 || lr.indexOf("union")>-1){
+result="[!] INYECCION SQL DETECTADA - UNION BASED
 
 El atacante intenta unir resultados de otras tablas.
 
@@ -203,8 +184,9 @@ El atacante intenta unir resultados de otras tablas.
 +-------------+------------------+-----------+
 
 UNION permite extraer datos de tablas no autorizadas.";
-        } else if(lc.indexOf("'--") !== -1 || lc.indexOf("' --") !== -1 || lc.indexOf("#") !== -1){
-            result = "[!] INYECCION SQL DETECTADA - COMMENT BASED
+}
+else if(lc.indexOf("'--")>-1 || lc.indexOf("' --")>-1 || lc.indexOf("#")>-1){
+result="[!] INYECCION SQL DETECTADA - COMMENT BASED
 
 Los caracteres '--' o '#' comentan el resto de la consulta.
 La validacion de la contrasena se ignora.
@@ -215,8 +197,9 @@ SELECT * FROM usuarios WHERE rut = 'admin' --' AND clave = '...'
 Resultado: Acceso concedido como 'admin'
 
 Este es uno de los ataques SQLi mas comunes.";
-        } else if(lc.indexOf("or 1=1") !== -1 || lc.indexOf("or '1'='1") !== -1){
-            result = "[!] INYECCION SQL DETECTADA - BOOLEAN BASED
+}
+else if(lc.indexOf("or 1=1")>-1 || lc.indexOf("or '1'='1")>-1){
+result="[!] INYECCION SQL DETECTADA - BOOLEAN BASED
 
 La condicion OR 1=1 (o '1'='1') siempre evalua como verdadera.
 Esto omite la autenticacion por completo.
@@ -224,62 +207,41 @@ Esto omite la autenticacion por completo.
 Resultado: Acceso concedido sin credenciales validas.
 
 Los ataques booleanos son dificiles de detectar en logs.";
-        } else {
-            var fakeUsers = [
-                {rut:"12.345.678-9", nombre:"Juan Perez", clave:"password123", saldo:"$1.250.000"},
-                {rut:"98.765.432-1", nombre:"Maria Gonzalez", clave:"maria2024", saldo:"$3.450.000"},
-                {rut:"11.222.333-4", nombre:"Carlos Ruiz", clave:"carlos99", saldo:"$890.000"},
-                {rut:"55.666.777-8", nombre:"Ana Silva", clave:"ana#secure", saldo:"$5.100.000"}
-            ];
-            var user = null;
-            for(var i = 0; i < fakeUsers.length; i++){
-                if(fakeUsers[i].rut === rut && fakeUsers[i].clave === clave){
-                    user = fakeUsers[i];
-                    break;
-                }
-            }
-            if(user){
-                result = "AUTENTICACION EXITOSA (simulada)
+}
+else{
+var fu=[{r:"12.345.678-9",n:"Juan Perez",c:"password123",s:"$1.250.000"},{r:"98.765.432-1",n:"Maria Gonzalez",c:"maria2024",s:"$3.450.000"},{r:"11.222.333-4",n:"Carlos Ruiz",c:"carlos99",s:"$890.000"},{r:"55.666.777-8",n:"Ana Silva",c:"ana#secure",s:"$5.100.000"}];
+var u=null;
+for(var i=0;i<fu.length;i++){if(fu[i].r===rut && fu[i].c===clave){u=fu[i];break;}}
+if(u){result="AUTENTICACION EXITOSA (simulada)
 
-Bienvenido, " + user.nombre + "
+Bienvenido, "+u.n+"
 
 +-------------+------------------+-----------+
 | RUT         | Nombre           | Saldo     |
 +-------------+------------------+-----------+
-| " + user.rut + "| " + user.nombre + " | " + user.saldo + "|
+| "+u.r+"| "+u.n+" | "+u.s+"|
 +-------------+------------------+-----------+
 
-En un sistema real, la sesion se iniciaria aqui.";
-            } else {
-                result = "AUTENTICACION FALLIDA
+En un sistema real, la sesion se iniciaria aqui.";}
+else{result="AUTENTICACION FALLIDA
 
 No se encontro ningun usuario con las credenciales proporcionadas.
 
 Consulta ejecutada:
-SELECT * FROM usuarios WHERE rut = '" + rut + "' AND clave = '" + clave + "'
+SELECT * FROM usuarios WHERE rut = '"+rut+"' AND clave = '"+clave+"'
 
 Resultado: 0 filas devueltas.
 
-Intenta un payload de inyeccion SQL para ver el comportamiento.";
-            }
-        }
+Intenta un payload de inyeccion SQL para ver el comportamiento.";}
+}
 
-        responseDiv.textContent = result;
+responseDiv.textContent=result;
 
-        if(lc.indexOf("' or '") !== -1 && lc.indexOf("'='1") !== -1){
-            hintDiv.innerHTML = "Buen trabajo! Has ejecutado un ataque de inyeccion SQL basado en condiciones booleanas. Observa como la consulta devuelve todos los registros de la tabla.";
-        } else if(lc.indexOf("union") !== -1){
-            hintDiv.innerHTML = "Excelente! Has probado un ataque UNION-based. En un sistema real, esto podria extraer datos de otras tablas.";
-        } else if(lc.indexOf("'--") !== -1 || lc.indexOf("#") !== -1){
-            hintDiv.innerHTML = "Detectado! Has usado comentarios SQL para omitir la validacion de contrasena. Este es uno de los vectores de ataque mas comunes.";
-        } else if(lc.indexOf("or 1=1") !== -1){
-            hintDiv.innerHTML = "Payload valido! La condicion OR 1=1 fuerza un resultado verdadero, bypassing la autenticacion.";
-        } else if(clave.length > 0){
-            hintDiv.innerHTML = "Tip educativo: Intenta usar payloads como ' OR '1'='1' -- o admin'-- en el campo de clave para observar como se modifica la consulta SQL.";
-        }
-    } catch(e) {
-        document.getElementById('responseContent').textContent = 'ERROR: ' + e.message;
-    }
+if(lc.indexOf("' or '")>-1 && lc.indexOf("'='1")>-1){hintDiv.innerHTML="Buen trabajo! Has ejecutado un ataque de inyeccion SQL basado en condiciones booleanas. Observa como la consulta devuelve todos los registros de la tabla.";}
+else if(lc.indexOf("union")>-1){hintDiv.innerHTML="Excelente! Has probado un ataque UNION-based. En un sistema real, esto podria extraer datos de otras tablas.";}
+else if(lc.indexOf("'--")>-1 || lc.indexOf("#")>-1){hintDiv.innerHTML="Detectado! Has usado comentarios SQL para omitir la validacion de contrasena. Este es uno de los vectores de ataque mas comunes.";}
+else if(lc.indexOf("or 1=1")>-1){hintDiv.innerHTML="Payload valido! La condicion OR 1=1 fuerza un resultado verdadero, bypassing la autenticacion.";}
+else if(clave.length>0){hintDiv.innerHTML="Tip educativo: Intenta usar payloads como ' OR '1'='1' -- o admin'-- en el campo de clave para observar como se modifica la consulta SQL.";}
 }
 </script>
 
