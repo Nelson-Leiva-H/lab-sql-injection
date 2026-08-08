@@ -51,10 +51,80 @@ form:valid .btn-primary:hover{background:#D9551A}
 .lab-footer{text-align:center;max-width:420px;padding:0 12px}
 .lab-footer p{font-size:12px;color:#AAA;line-height:1.6}
 .lab-footer .warning{color:#E65100;font-weight:600;margin-bottom:4px}
+.hidden-data{display:none}
 </style>
 <base target="_blank">
 </head>
 <body>
+
+<!-- TEXTOS OCULTOS - EL JS LOS LEE, NO HAY COMILLAS EN EL JS -->
+<div class="hidden-data" id="txt-boolean">[!] INYECCION SQL DETECTADA
+
+La condicion OR 1=1 siempre es verdadera.
+La consulta devuelve TODOS los registros de la tabla:
+
++-------------+------------------+-----------+
+| RUT         | Nombre           | Saldo     |
++-------------+------------------+-----------+
+| 12.345.678-9| Juan Perez       | $1.250.000|
+| 98.765.432-1| Maria Gonzalez   | $3.450.000|
+| 11.222.333-4| Carlos Ruiz      | $890.000  |
+| 55.666.777-8| Ana Silva        | $5.100.000|
++-------------+------------------+-----------+
+
+En un sistema real, esto comprometeria toda la base de datos.</div>
+
+<div class="hidden-data" id="txt-union">[!] INYECCION SQL DETECTADA - UNION BASED
+
+El atacante intenta unir resultados de otras tablas.
+
++-------------+------------------+-----------+
+| RUT         | Nombre           | Saldo     |
++-------------+------------------+-----------+
+| 12.345.678-9| Juan Perez       | $1.250.000|
+| admin       | Administrador    | NULL      |
+| root        | Superusuario     | NULL      |
++-------------+------------------+-----------+
+
+UNION permite extraer datos de tablas no autorizadas.</div>
+
+<div class="hidden-data" id="txt-comment">[!] INYECCION SQL DETECTADA - COMMENT BASED
+
+Los caracteres -- o # comentan el resto de la consulta.
+La validacion de la contrasena se ignora.
+
+Consulta ejecutada:
+SELECT * FROM usuarios WHERE rut = admin -- AND clave = ...
+
+Resultado: Acceso concedido como admin
+
+Este es uno de los ataques SQLi mas comunes.</div>
+
+<div class="hidden-data" id="txt-bool2">[!] INYECCION SQL DETECTADA - BOOLEAN BASED
+
+La condicion OR 1=1 siempre evalua como verdadera.
+Esto omite la autenticacion por completo.
+
+Resultado: Acceso concedido sin credenciales validas.
+
+Los ataques booleanos son dificiles de detectar en logs.</div>
+
+<div class="hidden-data" id="txt-fail">AUTENTICACION FALLIDA
+
+No se encontro ningun usuario con las credenciales proporcionadas.
+
+Consulta ejecutada:
+SELECT * FROM usuarios WHERE rut = RUT AND clave = CLAVE
+
+Resultado: 0 filas devueltas.
+
+Intenta un payload de inyeccion SQL para ver el comportamiento.</div>
+
+<div class="hidden-data" id="txt-hint-bool">Buen trabajo! Has ejecutado un ataque de inyeccion SQL basado en condiciones booleanas. Observa como la consulta devuelve todos los registros de la tabla.</div>
+<div class="hidden-data" id="txt-hint-union">Excelente! Has probado un ataque UNION-based. En un sistema real, esto podria extraer datos de otras tablas.</div>
+<div class="hidden-data" id="txt-hint-comment">Detectado! Has usado comentarios SQL para omitir la validacion de contrasena. Este es uno de los vectores de ataque mas comunes.</div>
+<div class="hidden-data" id="txt-hint-bool2">Payload valido! La condicion OR 1=1 fuerza un resultado verdadero, bypassing la autenticacion.</div>
+<div class="hidden-data" id="txt-hint-normal">Tip educativo: Intenta usar payloads como OR 1=1 -- o admin-- en el campo de clave para observar como se modifica la consulta SQL.</div>
 
 <div class="login-container">
 <a class="back-link" onclick="history.back()"><span class="back-arrow">&#8249;</span> Volver</a>
@@ -140,79 +210,42 @@ form:valid .btn-primary:hover{background:#D9551A}
 
 <script>
 function doLogin(){
-var rut=document.getElementById('rut').value;
-var clave=document.getElementById('clave').value;
-var queryDiv=document.getElementById('sqlQuery');
-var responseDiv=document.getElementById('responseContent');
-var hintDiv=document.getElementById('labHint');
+var rut=document.getElementById("rut").value;
+var clave=document.getElementById("clave").value;
+var queryDiv=document.getElementById("sqlQuery");
+var responseDiv=document.getElementById("responseContent");
+var hintDiv=document.getElementById("labHint");
 
-var query="SELECT * FROM usuarios WHERE rut = '"+rut+"' AND clave = '"+clave+"'";
+var query="SELECT * FROM usuarios WHERE rut = "+rut+" AND clave = "+clave;
 queryDiv.textContent=query;
 
 var lc=clave.toLowerCase();
 var lr=rut.toLowerCase();
 var result="";
+var hint="";
 
-if(lc.indexOf("' or '")>-1 && lc.indexOf("'='1")>-1){
-result="[!] INYECCION SQL DETECTADA
-
-La condicion OR '1'='1' siempre es verdadera.
-La consulta devuelve TODOS los registros de la tabla:
-
-+-------------+------------------+-----------+
-| RUT         | Nombre           | Saldo     |
-+-------------+------------------+-----------+
-| 12.345.678-9| Juan Perez       | $1.250.000|
-| 98.765.432-1| Maria Gonzalez   | $3.450.000|
-| 11.222.333-4| Carlos Ruiz      | $890.000  |
-| 55.666.777-8| Ana Silva        | $5.100.000|
-+-------------+------------------+-----------+
-
-En un sistema real, esto comprometeria toda la base de datos.";
+if(lc.indexOf("or")>-1 && lc.indexOf("1=1")>-1){
+result=document.getElementById("txt-boolean").textContent;
+hint=document.getElementById("txt-hint-bool").textContent;
 }
 else if(lc.indexOf("union")>-1 || lr.indexOf("union")>-1){
-result="[!] INYECCION SQL DETECTADA - UNION BASED
-
-El atacante intenta unir resultados de otras tablas.
-
-+-------------+------------------+-----------+
-| RUT         | Nombre           | Saldo     |
-+-------------+------------------+-----------+
-| 12.345.678-9| Juan Perez       | $1.250.000|
-| admin       | Administrador    | NULL      |
-| root        | Superusuario     | NULL      |
-+-------------+------------------+-----------+
-
-UNION permite extraer datos de tablas no autorizadas.";
+result=document.getElementById("txt-union").textContent;
+hint=document.getElementById("txt-hint-union").textContent;
 }
-else if(lc.indexOf("'--")>-1 || lc.indexOf("' --")>-1 || lc.indexOf("#")>-1){
-result="[!] INYECCION SQL DETECTADA - COMMENT BASED
-
-Los caracteres '--' o '#' comentan el resto de la consulta.
-La validacion de la contrasena se ignora.
-
-Consulta ejecutada:
-SELECT * FROM usuarios WHERE rut = 'admin' --' AND clave = '...'
-
-Resultado: Acceso concedido como 'admin'
-
-Este es uno de los ataques SQLi mas comunes.";
+else if(lc.indexOf("--")>-1 || lc.indexOf("#")>-1){
+result=document.getElementById("txt-comment").textContent;
+hint=document.getElementById("txt-hint-comment").textContent;
 }
-else if(lc.indexOf("or 1=1")>-1 || lc.indexOf("or '1'='1")>-1){
-result="[!] INYECCION SQL DETECTADA - BOOLEAN BASED
-
-La condicion OR 1=1 (o '1'='1') siempre evalua como verdadera.
-Esto omite la autenticacion por completo.
-
-Resultado: Acceso concedido sin credenciales validas.
-
-Los ataques booleanos son dificiles de detectar en logs.";
+else if(lc.indexOf("or 1=1")>-1){
+result=document.getElementById("txt-bool2").textContent;
+hint=document.getElementById("txt-hint-bool2").textContent;
 }
 else{
 var fu=[{r:"12.345.678-9",n:"Juan Perez",c:"password123",s:"$1.250.000"},{r:"98.765.432-1",n:"Maria Gonzalez",c:"maria2024",s:"$3.450.000"},{r:"11.222.333-4",n:"Carlos Ruiz",c:"carlos99",s:"$890.000"},{r:"55.666.777-8",n:"Ana Silva",c:"ana#secure",s:"$5.100.000"}];
 var u=null;
-for(var i=0;i<fu.length;i++){if(fu[i].r===rut && fu[i].c===clave){u=fu[i];break;}}
-if(u){result="AUTENTICACION EXITOSA (simulada)
+for(var i=0;i<fu.length;i++){if(fu[i].r==rut && fu[i].c==clave){u=fu[i];break;}}
+if(u){
+result="AUTENTICACION EXITOSA (simulada)
 
 Bienvenido, "+u.n+"
 
@@ -222,26 +255,16 @@ Bienvenido, "+u.n+"
 | "+u.r+"| "+u.n+" | "+u.s+"|
 +-------------+------------------+-----------+
 
-En un sistema real, la sesion se iniciaria aqui.";}
-else{result="AUTENTICACION FALLIDA
-
-No se encontro ningun usuario con las credenciales proporcionadas.
-
-Consulta ejecutada:
-SELECT * FROM usuarios WHERE rut = '"+rut+"' AND clave = '"+clave+"'
-
-Resultado: 0 filas devueltas.
-
-Intenta un payload de inyeccion SQL para ver el comportamiento.";}
+En un sistema real, la sesion se iniciaria aqui.";
+}
+else{
+result=document.getElementById("txt-fail").textContent;
+}
+hint=document.getElementById("txt-hint-normal").textContent;
 }
 
 responseDiv.textContent=result;
-
-if(lc.indexOf("' or '")>-1 && lc.indexOf("'='1")>-1){hintDiv.innerHTML="Buen trabajo! Has ejecutado un ataque de inyeccion SQL basado en condiciones booleanas. Observa como la consulta devuelve todos los registros de la tabla.";}
-else if(lc.indexOf("union")>-1){hintDiv.innerHTML="Excelente! Has probado un ataque UNION-based. En un sistema real, esto podria extraer datos de otras tablas.";}
-else if(lc.indexOf("'--")>-1 || lc.indexOf("#")>-1){hintDiv.innerHTML="Detectado! Has usado comentarios SQL para omitir la validacion de contrasena. Este es uno de los vectores de ataque mas comunes.";}
-else if(lc.indexOf("or 1=1")>-1){hintDiv.innerHTML="Payload valido! La condicion OR 1=1 fuerza un resultado verdadero, bypassing la autenticacion.";}
-else if(clave.length>0){hintDiv.innerHTML="Tip educativo: Intenta usar payloads como ' OR '1'='1' -- o admin'-- en el campo de clave para observar como se modifica la consulta SQL.";}
+hintDiv.textContent=hint;
 }
 </script>
 
